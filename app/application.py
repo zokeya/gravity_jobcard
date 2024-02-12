@@ -10,7 +10,7 @@ from .routers import user_role,auth, user, ticket, mail_config
 
 # models.Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+application = app = FastAPI()
 
 origins = ["*"]
 
