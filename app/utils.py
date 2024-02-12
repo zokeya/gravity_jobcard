@@ -6,11 +6,14 @@ from .database import SessionLocal
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-def hash(password:str):
+
+def hash(password: str):
     return pwd_context.hash(password)
+
 
 def verify_login(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
+
 
 def get_user(db: Session, user_id: int):
     return db.query(models.User).filter(models.User.id == user_id).first()
@@ -24,7 +27,7 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.User).offset(skip).limit(limit).all()
 
 
-def generate_pwd_from_email(email:str):
+def generate_pwd_from_email(email: str):
     username, domain = email.split("@")
     first_name = username[0].upper()
     last_name = username.split(".")[1].lower()
@@ -51,7 +54,7 @@ def create_user(db: Session, user: schemas.UserCreate):
         user_role_id=user.user_role_id,
         signature_url=user.signature_url,
         image_url=user.image_url
-        )
+    )
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
@@ -78,14 +81,18 @@ def create_user_ticket(db: Session, ticket: schemas.TicketCreate, user_id: int):
     db.refresh(db_ticket)
     return db_ticket
 
-def get_user_roles(db: Session, skip: int=0, limit:int=100):
+
+def get_user_roles(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.UserRole).offset(skip).limit(limit).all()
+
 
 def get_user_role_by_name(db: Session, rolename: str):
     return db.query(models.UserRole).filter(models.UserRole.name == rolename).first()
 
-def get_unsent_emails(db: Session, limit:int=100):
+
+def get_unsent_emails(db: Session, limit: int = 100):
     return db.query(models.Email).filter(models.Email.is_sent == False).limit(limit).all()
+
 
 def get_email_config(db: Session):
     return db.query(models.EmailConfig).filter(models.EmailConfig.is_active == True).first()
